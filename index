@@ -1,0 +1,1398 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0126">
+<title>AUniverse — Documentação Central do Projeto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --space-void:#0b0126; --cosmic-surface:#241651; --nebula:#5701bc; --plasma:#074969;
+  --mint:#d6fff6; --active:#10b981; --hiatus:#f59e0b; --explicit:#ef4444;
+  --ink:#f8f5ff; --ink-soft:#c5bddc; --ink-dim:#958baa;
+  --line:rgba(214,255,246,.14); --line-strong:rgba(214,255,246,.28);
+  --surf-soft:rgba(36,22,81,.62); --surf-deep:rgba(11,1,38,.78);
+  --font-display:"Sora",sans-serif; --font-body:"Inter",sans-serif; --font-mono:"JetBrains Mono",monospace;
+  --r-sm:10px; --r-md:16px; --r-lg:24px;
+  --shadow-card:0 18px 50px rgba(0,0,0,.25); --shadow-glow:0 0 48px rgba(87,1,188,.32);
+  --sidebar-w:264px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-width:320px; color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.6;
+  background:
+    radial-gradient(circle at 88% -10%, rgba(87,1,188,.32), transparent 36rem),
+    radial-gradient(circle at -10% 40%, rgba(7,73,105,.22), transparent 30rem),
+    var(--space-void);
+  min-height:100vh;
+}
+a{color:inherit}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--mint); outline-offset:2px}
+h1,h2,h3,h4{margin:0; font-family:var(--font-display); letter-spacing:-.02em}
+p{margin:0}
+.mono{font-family:var(--font-mono)}
+.eyebrow{color:var(--mint); font:600 11px/1.4 var(--font-mono); letter-spacing:.12em; text-transform:uppercase}
+.muted{color:var(--ink-soft)}
+.dim{color:var(--ink-dim)}
+ul{margin:0; padding:0}
+li{list-style:none}
+
+/* ---------- shell layout ---------- */
+.shell{display:flex; min-height:100vh}
+.sidebar{
+  width:var(--sidebar-w); flex:0 0 auto; position:sticky; top:0; height:100vh; overflow-y:auto;
+  border-right:1px solid var(--line); background:rgba(11,1,38,.55); backdrop-filter:blur(20px);
+  padding:22px 16px 24px; display:flex; flex-direction:column; gap:22px; z-index:20;
+}
+.brand{display:flex; align-items:center; gap:10px; padding:2px 6px 14px; border-bottom:1px solid var(--line)}
+.brand-mark{display:grid; place-items:center; width:34px; height:34px; border-radius:50%; border:1px solid var(--line-strong); color:var(--mint); box-shadow:var(--shadow-glow); flex:0 0 auto}
+.brand-mark svg{width:18px; height:18px}
+.brand-text{font:700 16px var(--font-display); line-height:1.15}
+.brand-text small{display:block; font:500 10px var(--font-mono); color:var(--ink-dim); letter-spacing:.08em; text-transform:uppercase}
+
+.navgroup + .navgroup{margin-top:2px}
+.navgroup-label{padding:0 10px 6px; font:600 10px var(--font-mono); letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim)}
+.navlist{display:flex; flex-direction:column; gap:3px}
+.navlink{
+  display:flex; align-items:center; gap:10px; min-height:42px; padding:0 10px; border-radius:var(--r-sm);
+  color:var(--ink-soft); text-decoration:none; font:600 13px var(--font-display); border:1px solid transparent; background:none; width:100%; text-align:left;
+}
+.navlink svg{width:16px; height:16px; flex:0 0 auto; opacity:.85}
+.navlink:hover{color:var(--ink); background:rgba(255,255,255,.04)}
+.navlink[aria-current="page"]{color:var(--mint); background:linear-gradient(90deg, rgba(87,1,188,.35), rgba(87,1,188,.06)); border-color:var(--line-strong)}
+
+.countdown-pill{margin-top:auto; padding:14px; border-radius:var(--r-md); border:1px solid var(--line-strong); background:linear-gradient(155deg, rgba(87,1,188,.35), rgba(7,73,105,.18)); box-shadow:var(--shadow-card)}
+.countdown-pill .eyebrow{display:block; margin-bottom:6px}
+.countdown-num{font:700 26px var(--font-display); color:var(--mint)}
+.countdown-sub{font:500 11px var(--font-mono); color:var(--ink-soft); margin-top:2px}
+
+main{flex:1 1 auto; min-width:0}
+.panel-wrap{max-width:1180px; margin:0 auto; padding:40px 32px 120px}
+.page{display:none}
+.page.active{display:block; animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){.page.active{animation:none}}
+
+.page-head{margin-bottom:36px}
+.page-head h1{font-size:clamp(30px,4vw,44px); line-height:1.05; margin-top:10px}
+.page-head p{margin-top:14px; max-width:720px; color:var(--ink-soft); font-size:17px}
+
+.card{border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surf-soft); padding:24px; box-shadow:var(--shadow-card)}
+.card + .card{margin-top:18px}
+.card h3{font-size:18px; margin-bottom:10px}
+.grid{display:grid; gap:18px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+section.block{margin-top:44px}
+section.block:first-of-type{margin-top:0}
+.block-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px}
+.block-head h2{font-size:clamp(22px,2.6vw,28px)}
+
+/* color chips */
+.color-card{border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden; background:var(--surf-soft)}
+.color-swatch{height:80px}
+.color-body{padding:12px 14px}
+.color-body h4{font-size:14px}
+.color-body .mono{font-size:11px; color:var(--ink-dim); margin-top:4px; display:block}
+
+/* type specimens */
+.type-card{border:1px solid var(--line); border-radius:var(--r-md); background:var(--surf-soft); padding:18px}
+.type-sample-h{font:700 30px var(--font-display); margin-top:8px}
+.type-sample-b{font:400 16px var(--font-body); margin-top:8px; color:var(--ink-soft)}
+.type-sample-m{font:500 13px var(--font-mono); margin-top:8px; color:var(--mint); letter-spacing:.06em}
+
+/* team table */
+.team-table{width:100%; border-collapse:collapse; font-size:14px}
+.team-table th{text-align:left; font:600 11px var(--font-mono); text-transform:uppercase; letter-spacing:.08em; color:var(--ink-dim); padding:8px 12px; border-bottom:1px solid var(--line-strong)}
+.team-table td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+.team-table tr:last-child td{border-bottom:none}
+.badge{display:inline-block; padding:2px 9px; border-radius:999px; font:600 10.5px var(--font-mono); letter-spacing:.04em; text-transform:uppercase}
+.badge-be{background:rgba(7,73,105,.35); color:#8fd7ff; border:1px solid rgba(7,73,105,.7)}
+.badge-fe{background:rgba(87,1,188,.28); color:#e4c9ff; border:1px solid rgba(87,1,188,.6)}
+.badge-bd{background:rgba(16,185,129,.18); color:#7bf3c7; border:1px solid rgba(16,185,129,.5)}
+.badge-design{background:rgba(214,255,246,.12); color:var(--mint); border:1px solid var(--line-strong)}
+.badge-qa{background:rgba(245,158,11,.16); color:#ffd18a; border:1px solid rgba(245,158,11,.5)}
+.badge-lead{background:rgba(239,68,68,.16); color:#ff9d9d; border:1px solid rgba(239,68,68,.45)}
+
+/* glossary */
+.term{border:1px solid var(--line); border-radius:var(--r-md); background:var(--surf-soft); padding:16px 18px}
+.term dt{font:700 15px var(--font-display); color:var(--mint)}
+.term dd{margin:6px 0 0; color:var(--ink-soft); font-size:14px}
+
+/* steps */
+.steps{counter-reset:step; display:flex; flex-direction:column; gap:0}
+.step{position:relative; padding:0 0 28px 44px; border-left:1px solid var(--line-strong)}
+.step:last-child{border-color:transparent; padding-bottom:0}
+.step::before{counter-increment:step; content:counter(step); position:absolute; left:-15px; top:0; width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--nebula); color:#fff; font:700 13px var(--font-display); box-shadow:0 0 0 4px var(--space-void)}
+.step h4{font-size:16px; margin-bottom:6px}
+.step p{color:var(--ink-soft); font-size:14.5px}
+.step code, .card code, .callout code{background:rgba(0,0,0,.35); border:1px solid var(--line); padding:2px 7px; border-radius:6px; font:500 12.5px var(--font-mono); color:var(--mint)}
+.codeblock{background:rgba(0,0,0,.42); border:1px solid var(--line); border-radius:var(--r-sm); padding:14px 16px; font:500 12.5px/1.7 var(--font-mono); color:#c4f5e6; overflow-x:auto; white-space:pre}
+
+.callout{border:1px solid var(--line-strong); border-radius:var(--r-md); padding:16px 18px; display:flex; gap:12px; align-items:flex-start}
+.callout svg{flex:0 0 auto; width:20px; height:20px; margin-top:2px}
+.callout-info{background:rgba(7,73,105,.2); color:var(--ink)}
+.callout-info svg{color:#7fd6ff}
+.callout-warn{background:rgba(245,158,11,.12)}
+.callout-warn svg{color:var(--hiatus)}
+.callout-open{background:rgba(87,1,188,.18)}
+.callout-open svg{color:var(--mint)}
+
+/* roadmap timeline */
+.timeline{display:flex; flex-direction:column; gap:0; position:relative}
+.tl-item{display:grid; grid-template-columns:150px 26px 1fr; gap:0; align-items:start}
+.tl-date{padding:20px 16px 20px 0; text-align:right; font:600 12px var(--font-mono); color:var(--ink-dim)}
+.tl-rail{display:flex; flex-direction:column; align-items:center; padding-top:22px}
+.tl-dot{width:16px; height:16px; border-radius:50%; border:3px solid var(--space-void); box-shadow:0 0 0 1px var(--line-strong); flex:0 0 auto}
+.tl-line{flex:1; width:2px; background:var(--line-strong); margin-top:2px}
+.tl-item:last-child .tl-line{display:none}
+.tl-content{padding:14px 0 26px}
+.tl-content h3{font-size:18px}
+.tl-content .status-tag{margin-left:10px}
+.tl-content p{margin-top:8px; color:var(--ink-soft); font-size:14.5px; max-width:640px}
+.tl-content ul{margin-top:10px; display:flex; flex-direction:column; gap:6px}
+.tl-content li{color:var(--ink-soft); font-size:14px; padding-left:18px; position:relative}
+.tl-content li::before{content:"—"; position:absolute; left:0; color:var(--ink-dim)}
+
+.status-tag{display:inline-flex; align-items:center; gap:6px; padding:3px 11px; border-radius:999px; font:600 11px var(--font-mono); text-transform:uppercase; letter-spacing:.04em}
+.status-dot{width:7px; height:7px; border-radius:50%}
+.status-progress{background:rgba(245,158,11,.15); color:var(--hiatus)}
+.status-progress .status-dot{background:var(--hiatus)}
+.status-todo{background:rgba(255,255,255,.06); color:var(--ink-dim)}
+.status-todo .status-dot{background:var(--ink-dim)}
+.status-done{background:rgba(16,185,129,.15); color:var(--active)}
+.status-done .status-dot{background:var(--active)}
+
+/* status overview table */
+.status-table{width:100%; border-collapse:collapse; font-size:14px}
+.status-table th{text-align:left; padding:9px 12px; font:600 11px var(--font-mono); text-transform:uppercase; color:var(--ink-dim); border-bottom:1px solid var(--line-strong)}
+.status-table td{padding:11px 12px; border-bottom:1px solid var(--line)}
+
+/* issue cards */
+.issue{border:1px solid var(--line); border-radius:var(--r-md); background:var(--surf-soft); padding:18px 20px}
+.issue + .issue{margin-top:12px}
+.issue-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:space-between}
+.issue-id{font:700 12px var(--font-mono); color:var(--mint)}
+.issue-title{font:700 15.5px var(--font-display); margin-top:6px}
+.issue-tags{display:flex; gap:6px; flex-wrap:wrap}
+.tag{padding:2px 9px; border-radius:999px; font:600 10.5px var(--font-mono); text-transform:uppercase; letter-spacing:.03em; border:1px solid var(--line-strong); color:var(--ink-soft)}
+.tag-urgente{border-color:rgba(239,68,68,.5); color:#ff9d9d; background:rgba(239,68,68,.1)}
+.tag-alta{border-color:rgba(245,158,11,.5); color:var(--hiatus); background:rgba(245,158,11,.08)}
+.tag-media{border-color:rgba(7,73,105,.6); color:#8fd7ff; background:rgba(7,73,105,.16)}
+.tag-baixa{border-color:var(--line-strong); color:var(--ink-dim)}
+.issue-desc{margin-top:10px; color:var(--ink-soft); font-size:14px}
+.issue ul{margin-top:10px; display:flex; flex-direction:column; gap:5px}
+.issue li{font-size:13.5px; color:var(--ink-soft); padding-left:20px; position:relative}
+.issue li::before{content:"☐"; position:absolute; left:0; color:var(--ink-dim); font-family:var(--font-mono)}
+.issue-note{margin-top:10px; font-size:12.5px; color:var(--ink-dim); font-style:normal}
+
+.role-toggle{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap}
+.role-toggle button{padding:9px 16px; border-radius:999px; border:1px solid var(--line-strong); background:rgba(255,255,255,.03); color:var(--ink-soft); font:600 13px var(--font-display)}
+.role-toggle button.active{background:var(--nebula); color:#fff; border-color:var(--nebula)}
+.role-panel{display:none}
+.role-panel.active{display:block}
+
+/* checklist grid for MVP */
+.checklist{display:flex; flex-direction:column; gap:8px}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14px; color:var(--ink-soft); padding-left:0}
+.checklist li::before{display:none}
+.checklist .box{flex:0 0 auto; width:16px; height:16px; border:1.5px solid var(--line-strong); border-radius:4px; margin-top:2px}
+
+/* legislation */
+.law-card{border:1px solid var(--line); border-radius:var(--r-md); background:var(--surf-soft); padding:20px}
+.law-card .eyebrow{display:block; margin-bottom:6px}
+
+/* test template */
+.template-box{border:1px dashed var(--line-strong); border-radius:var(--r-md); padding:20px; background:rgba(0,0,0,.18)}
+.field-row{display:grid; grid-template-columns:180px 1fr; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:14px}
+.field-row:last-child{border-bottom:none}
+.field-row .label{font:600 12px var(--font-mono); color:var(--ink-dim); text-transform:uppercase; letter-spacing:.05em}
+
+.email-cta{display:inline-flex; align-items:center; gap:10px; margin-top:14px; padding:12px 18px; border-radius:999px; background:linear-gradient(90deg,var(--nebula),#7a1fe0); color:#fff; font:700 14px var(--font-display); text-decoration:none; box-shadow:var(--shadow-glow)}
+.email-cta svg{width:16px; height:16px}
+
+table.simple{width:100%; border-collapse:collapse; font-size:13.5px}
+table.simple th{text-align:left; padding:8px 10px; font:600 11px var(--font-mono); color:var(--ink-dim); text-transform:uppercase; border-bottom:1px solid var(--line-strong)}
+table.simple td{padding:9px 10px; border-bottom:1px solid var(--line); color:var(--ink-soft)}
+
+.footer-note{margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font:500 12px var(--font-mono); color:var(--ink-dim)}
+
+/* mobile: sidebar becomes top drawer */
+.menu-btn{display:none; position:fixed; top:14px; left:14px; z-index:40; width:44px; height:44px; border-radius:50%; border:1px solid var(--line-strong); background:var(--surf-deep); color:var(--mint); align-items:center; justify-content:center; backdrop-filter:blur(10px)}
+.menu-btn svg{width:20px; height:20px}
+@media (max-width: 880px){
+  .menu-btn{display:flex}
+  .sidebar{position:fixed; left:0; top:0; transform:translateX(-102%); transition:transform .25s ease; width:min(300px,86vw); box-shadow:0 0 60px rgba(0,0,0,.6)}
+  .sidebar.open{transform:translateX(0)}
+  .panel-wrap{padding:80px 18px 100px}
+  .tl-item{grid-template-columns:26px 1fr}
+  .tl-date{display:none}
+}
+.scrim{display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:15}
+.scrim.show{display:block}
+</style>
+</head>
+<body>
+
+<button class="menu-btn" id="menuBtn" aria-label="Abrir navegação" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4 29.6 18.4 44 24l-14.4 5.6L24 44l-5.6-14.4L4 24l14.4-5.6L24 4Z"/><circle cx="24" cy="24" r="4.5"/></svg></div>
+      <div class="brand-text">AUniverse<small>Central da Produção</small></div>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgroup-label">Visão do produto</div>
+      <div class="navlist">
+        <button class="navlink" data-target="sobre" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>
+          Sobre o projeto
+        </button>
+        <button class="navlink" data-target="tutorial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5c4 0 5 1 8 1s4-1 8-1v14c-4 0-5 1-8 1s-4-1-8-1V5Z"/></svg>
+          GitHub &amp; Linear
+        </button>
+        <button class="navlink" data-target="roadmap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5m0 14h6m-6 0 4-4m10-10v14m0-14h-6m6 0-4 4"/></svg>
+          Roadmap &amp; Milestones
+        </button>
+        <button class="navlink" data-target="legislacao">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 7l-3 6a3 3 0 0 0 6 0l-3-6Zm14 0-3 6a3 3 0 0 0 6 0l-3-6ZM5 7h14M8 21h8"/></svg>
+          Legislação
+        </button>
+      </div>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgroup-label">Backlog por cargo</div>
+      <div class="navlist">
+        <button class="navlink" data-target="backend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><circle cx="8" cy="7" r=".6" fill="currentColor"/><circle cx="8" cy="17" r=".6" fill="currentColor"/></svg>
+          Back-end
+        </button>
+        <button class="navlink" data-target="frontend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>
+          Front-end
+        </button>
+        <button class="navlink" data-target="bancodados">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+          Banco de Dados
+        </button>
+        <button class="navlink" data-target="design">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.2 0-.9.7-1.5 1.5-1.5H16a4 4 0 0 0 4-4c0-4.4-3.6-8-8-8Z"/><circle cx="7.5" cy="10.5" r="1" fill="currentColor"/><circle cx="11" cy="7" r="1" fill="currentColor"/><circle cx="15" cy="8.5" r="1" fill="currentColor"/></svg>
+          Design
+        </button>
+        <button class="navlink" data-target="qa">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          Escritores / QA
+        </button>
+      </div>
+    </div>
+
+    <div class="countdown-pill">
+      <span class="eyebrow">Contagem regressiva</span>
+      <div class="countdown-num" id="countdownNum">—</div>
+      <div class="countdown-sub">até o lançamento Beta · 20/12/2026</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="panel-wrap">
+
+      <!-- ======================= ABA 1 — SOBRE ======================= -->
+      <section class="page active" id="page-sobre">
+        <div class="page-head">
+          <div class="eyebrow">Aba 01 · fundação</div>
+          <h1>O que é o AUniverse</h1>
+          <p>Uma plataforma social de leitura e escrita de AUs (Alternate Universes), onde autores compõem narrativas multimodais em blocos e leitores vivem uma experiência imersiva e social. Esta página é a fonte única de verdade para quem entra no time — conceitos, pessoas, paleta e tipografia.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>Visão geral</h2></div>
+          <div class="card">
+            <p class="muted">Escritores e leitores de fanfics em formato AU hoje se dividem entre redes sociais convencionais (dinâmicas, mas sem ferramentas de leitura contínua e catalogação) e plataformas tradicionais de texto (Wattpad, AO3 — sem suporte nativo a chats, posts e imagens interativas). O AUniverse resolve essa fragmentação com um <strong>editor por blocos</strong>: o mesmo capítulo pode intercalar narração, chat, post de rede social, imagem e divisor de cena, exatamente como uma AU é vivida nas redes — só que organizada.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Dicionave — vocabulário oficial</h2></div>
+          <p class="muted" style="margin-bottom:16px">Todos os fluxos, telas e documentos do projeto usam estes termos. Use-os também em conversas e commits para manter consistência.</p>
+          <dl class="grid grid-3" style="display:grid">
+            <div class="term"><dt>Obra</dt><dd>Uma história/AU completa — metadados (título, sinopse, fandom, gênero, tags) + capítulos.</dd></div>
+            <div class="term"><dt>Capítulo</dt><dd>Unidade narrativa dentro de uma obra, formada por uma sequência ordenada de blocos.</dd></div>
+            <div class="term"><dt>Bloco</dt><dd>A menor unidade narrativa: Narração, Chat, Imagem/Mídia ou Social Media (V2+).</dd></div>
+            <div class="term"><dt>Motor de Blocos</dt><dd>Sistema que renderiza corretamente cada tipo de bloco durante a leitura.</dd></div>
+            <div class="term"><dt>Bloco Explícito</dt><dd>Bloco marcado como conteúdo sensível (adulto, violência, gatilhos) — pode exigir aviso prévio.</dd></div>
+            <div class="term"><dt>Viajante</dt><dd>Papel de leitor: lê, ecoa, comenta, salva obras e organiza a biblioteca.</dd></div>
+            <div class="term"><dt>Arquiteto</dt><dd>Papel de autor: cria, edita e publica obras, capítulos e blocos.</dd></div>
+            <div class="term"><dt>Espectro</dt><dd>Feed principal — linha do tempo social onde autores divulgam obras.</dd></div>
+            <div class="term"><dt>Estação</dt><dd>Biblioteca pessoal do Viajante — lendo agora, já lidas, pastas.</dd></div>
+            <div class="term"><dt>Scanner</dt><dd>Busca e descoberta — tags, gênero, fandom, popularidade, histórico.</dd></div>
+            <div class="term"><dt>Observatório</dt><dd>Perfil público — informações, obras publicadas, estatísticas.</dd></div>
+            <div class="term"><dt>Reespectar</dt><dd>Ação equivalente a "retweetar" — divulga e fixa uma obra/post no próprio perfil.</dd></div>
+          </dl>
+          <p class="dim" style="margin-top:14px; font-size:13px">Um mesmo usuário pode alternar livremente entre os papéis de Viajante e Arquiteto.</p>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Quem trabalha no projeto</h2></div>
+          <div class="card">
+            <h3>Liderança &amp; Gestão</h3>
+            <table class="team-table">
+              <thead><tr><th>Pessoa</th><th>Papel</th><th>Responsabilidade</th></tr></thead>
+              <tbody>
+                <tr><td>Raissa</td><td><span class="badge badge-lead">Criadora</span></td><td>Criação e direcionamento geral do AUniverse; identidade e objetivos da plataforma.</td></tr>
+                <tr><td>Liz</td><td><span class="badge badge-lead">Liderança / Scrum Master</span></td><td>Acompanha o andamento, alinha a equipe, apoia decisões e mantém os objetivos do projeto.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h3>Desenvolvimento</h3>
+            <table class="team-table">
+              <thead><tr><th>Pessoa</th><th>Área</th></tr></thead>
+              <tbody>
+                <tr><td>Marcos</td><td><span class="badge badge-be">Back-end</span></td></tr>
+                <tr><td>Stephany</td><td><span class="badge badge-be">Back-end</span></td></tr>
+                <tr><td>Igor</td><td><span class="badge badge-bd">Banco de dados</span></td></tr>
+                <tr><td>Fernanda</td><td><span class="badge badge-bd">Banco de dados</span></td></tr>
+                <tr><td>Barbi</td><td><span class="badge badge-fe">Front-end</span></td></tr>
+                <tr><td>Lucy</td><td><span class="badge badge-fe">Front-end</span></td></tr>
+                <tr><td>Dani</td><td><span class="badge badge-fe">Front-end</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="grid grid-2">
+            <div class="card">
+              <h3>Design / UI / UX</h3>
+              <table class="team-table">
+                <tbody>
+                  <tr><td>Renata</td><td><span class="badge badge-design">Design</span></td></tr>
+                  <tr><td>Bianca</td><td><span class="badge badge-design">Design</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h3>Testes &amp; Qualidade (QA)</h3>
+              <table class="team-table">
+                <tbody>
+                  <tr><td>Bianca</td><td><span class="badge badge-qa">QA</span></td></tr>
+                </tbody>
+              </table>
+              <p class="dim" style="margin-top:10px; font-size:12.5px">Planejamento de testes, testes funcionais, validação de usabilidade e controle de qualidade.</p>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Escritores Testers</h3>
+            <p class="muted" style="margin-bottom:12px">Validam a plataforma do ponto de vista narrativo e da experiência real de leitura/escrita — essenciais para checar se as funcionalidades atendem quem realmente produz e consome histórias.</p>
+            <div class="grid grid-4">
+              <span class="tag">Tainá (Jay)</span><span class="tag">Luiza</span><span class="tag">Thais</span><span class="tag">Leticia</span>
+              <span class="tag">Larissa</span><span class="tag">Angelyna</span><span class="tag">Lena</span><span class="tag">Ellie</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Marketing &amp; Comunidade</h3>
+            <p class="muted">Responsabilidade compartilhada da equipe (<span class="mono">@everyone</span>): comunicação externa, divulgação do projeto e engajamento da comunidade.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Paleta de cores oficial</h2></div>
+          <p class="muted" style="margin-bottom:16px">Definida em <code>docs/DESIGN_FIGMA.md</code> e já aplicada em <code>globals.css</code> do front-end. Tema oficial: <strong>dark cósmico</strong>.</p>
+          <div class="grid grid-4">
+            <div class="color-card"><div class="color-swatch" style="background:#0b0126"></div><div class="color-body"><h4>Space Void</h4><span class="mono">#0b0126 · fundo global</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#241651"></div><div class="color-body"><h4>Cosmic Surface</h4><span class="mono">#241651 · cards, sidebars</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#5701bc"></div><div class="color-body"><h4>Nebula Purple</h4><span class="mono">#5701bc · CTA primária</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#074969"></div><div class="color-body"><h4>Plasma Blue</h4><span class="mono">#074969 · acento secundário</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#d6fff6"></div><div class="color-body"><h4>Starlight Mint</h4><span class="mono">#d6fff6 · texto luminoso</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#10b981"></div><div class="color-body"><h4>Status Active</h4><span class="mono">#10b981 · autosave / sucesso</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#f59e0b"></div><div class="color-body"><h4>Status Hiatus</h4><span class="mono">#f59e0b · atenção / hiato</span></div></div>
+            <div class="color-card"><div class="color-swatch" style="background:#ef4444"></div><div class="color-body"><h4>Status Explicit</h4><span class="mono">#ef4444 · +18 / destrutivo</span></div></div>
+          </div>
+          <div class="callout callout-warn" style="margin-top:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.5a1.5 1.5 0 0 0 1.3 2.2h16.4a1.5 1.5 0 0 0 1.3-2.2L13.7 3.9a1.5 1.5 0 0 0-2.6 0Z"/></svg>
+            <p>Plasma Blue (<code>#074969</code>) rende contraste baixo para texto pequeno sobre Space Void. Use-o principalmente como fundo/borda e reserve Starlight Mint para texto.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Tipografia</h2></div>
+          <div class="grid grid-3">
+            <div class="type-card"><h4 class="eyebrow">Sora — display</h4><div class="type-sample-h">Entre as Estrelas</div><div class="type-sample-m">títulos · headings · CTAs · 400/600/700</div></div>
+            <div class="type-card"><h4 class="eyebrow">Inter — corpo</h4><div class="type-sample-b">Cada bloco conduz a narrativa com clareza e espaço para respirar.</div><div class="type-sample-m">texto de interface · 400/500/600</div></div>
+            <div class="type-card"><h4 class="eyebrow">JetBrains Mono — metadados</h4><div class="type-sample-m" style="font-size:16px; color:var(--ink)">CAPÍTULO 01 · AUTO-SALVO</div><div class="type-sample-m">status · IDs · labels técnicos · 400/500</div></div>
+          </div>
+          <p class="dim" style="margin-top:14px; font-size:13px">No mobile, o corpo de texto nunca fica abaixo de 16px. Linhas de leitura: ~60–75 caracteres no desktop, 35–60 no mobile.</p>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Superfícies &amp; princípios visuais</h2></div>
+          <div class="grid grid-2">
+            <div class="card">
+              <h3>Tokens de superfície</h3>
+              <table class="simple">
+                <tr><td>Raio de controles</td><td class="mono">10px</td></tr>
+                <tr><td>Raio de cards</td><td class="mono">16px</td></tr>
+                <tr><td>Raio de painéis/hero</td><td class="mono">24px</td></tr>
+                <tr><td>Blur de glass</td><td class="mono">18–20px</td></tr>
+                <tr><td>Borda padrão</td><td class="mono">rgba(214,255,246,.14)</td></tr>
+                <tr><td>Alvo mínimo de toque</td><td class="mono">44×44px</td></tr>
+              </table>
+            </div>
+            <div class="card">
+              <h3>6 princípios</h3>
+              <ul style="display:flex; flex-direction:column; gap:8px; margin-top:4px">
+                <li class="muted" style="font-size:14px">1. Imersão antes do ruído — o conteúdo narrativo é o protagonista.</li>
+                <li class="muted" style="font-size:14px">2. Cosmos com controle — brilho e gradiente com intenção, sem virar neon.</li>
+                <li class="muted" style="font-size:14px">3. Leitura confortável — contraste, largura de linha e ritmo vertical.</li>
+                <li class="muted" style="font-size:14px">4. Ação com hierarquia — uma ação primária clara por contexto.</li>
+                <li class="muted" style="font-size:14px">5. Identidade consistente — mesmos tokens em todas as telas.</li>
+                <li class="muted" style="font-size:14px">6. Mobile primeiro — composição funciona em 320px antes do desktop.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA 2 — TUTORIAL ======================= -->
+      <section class="page" id="page-tutorial">
+        <div class="page-head">
+          <div class="eyebrow">Aba 02 · processo</div>
+          <h1>Como acessar GitHub &amp; Linear</h1>
+          <p>Passo a passo para clonar o repositório, seguir o fluxo de branches e acompanhar sprints/tasks no Linear. Siga exatamente essa ordem — ela evita conflitos e retrabalho.</p>
+        </div>
+
+        <div class="callout callout-open" style="margin-bottom:32px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>
+          <p><strong>Decisão em aberto:</strong> documentações antigas citam GitLab, mas o repositório real e os prints de configuração usam <strong>GitHub</strong> (<span class="mono">github.com/L4r1-aaa/auniverse</span>) e o board de sprints roda no <strong>Linear</strong>. Esta página documenta o fluxo que está de fato em uso hoje; se a equipe formalizar outra ferramenta, atualize esta aba.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>Repositório — clonar e configurar</h2></div>
+          <div class="steps">
+            <div class="step">
+              <h4>Acesse o repositório no GitHub</h4>
+              <p>Entre em <code>github.com</code> e abra o projeto <code>L4r1-aaa/auniverse</code>.</p>
+            </div>
+            <div class="step">
+              <h4>Copie a URL de clonagem</h4>
+              <p>Dentro do repositório, clique em <strong>Código</strong> → escolha <strong>HTTPS</strong> (mais simples para iniciantes) ou <strong>SSH</strong> (requer chave configurada) → copie a URL exibida.</p>
+            </div>
+            <div class="step">
+              <h4>Crie a pasta local e abra no VS Code</h4>
+              <p>Crie uma pasta chamada <code>AUniverse repo</code>, abra-a no VS Code e abra o terminal integrado.</p>
+            </div>
+            <div class="step">
+              <h4>Clone o repositório</h4>
+              <div class="codeblock">git init
+git pull
+git add .
+git commit -m "First Commit"
+git branch -M main
+git remote add origin https://github.com/L4r1-aaa/auniverse.git
+git push -u origin main</div>
+            </div>
+            <div class="step">
+              <h4>Troque para a branch <code>development</code> (obrigatório)</h4>
+              <p>Nenhum trabalho deve começar direto na <code>main</code>. Continue com o fluxo Git abaixo.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Fluxo de trabalho no Git</h2></div>
+          <div class="steps">
+            <div class="step">
+              <h4>Atualize as referências remotas</h4>
+              <div class="codeblock">git fetch</div>
+            </div>
+            <div class="step">
+              <h4>Crie e acesse a branch <code>development</code></h4>
+              <div class="codeblock">git checkout -b development origin/development
+git branch   &lt;- confirme que "development" está marcada como ativa</div>
+            </div>
+            <div class="step">
+              <h4>Sincronize a branch</h4>
+              <div class="codeblock">git pull origin development</div>
+            </div>
+            <div class="step">
+              <h4>Crie uma branch para a sua task</h4>
+              <p>Nenhum desenvolvimento deve ser feito diretamente na <code>development</code>.</p>
+              <div class="codeblock">git checkout -b feature/nome-da-task</div>
+            </div>
+            <div class="step">
+              <h4>Faça as alterações e revise</h4>
+              <div class="codeblock">git status</div>
+            </div>
+            <div class="step">
+              <h4>Adicione e faça commit</h4>
+              <div class="codeblock">git add .
+git commit -m "Descrição objetiva da alteração"</div>
+            </div>
+            <div class="step">
+              <h4>Suba a branch e abra o Pull Request</h4>
+              <div class="codeblock">git push origin feature/nome-da-task</div>
+              <p>No GitHub, use <strong>Compare &amp; pull request</strong>, descreva a alteração e vincule a issue correspondente do Linear.</p>
+            </div>
+          </div>
+          <div class="callout callout-warn" style="margin-top:20px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.5a1.5 1.5 0 0 0 1.3 2.2h16.4a1.5 1.5 0 0 0 1.3-2.2L13.7 3.9a1.5 1.5 0 0 0-2.6 0Z"/></svg>
+            <p><strong>Regras do projeto:</strong> nunca commitar direto em <code>main</code> ou <code>development</code>; todo desenvolvimento ocorre em branch de task; toda alteração deve ser documentada.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Linear — sprints, tasks e documentação</h2></div>
+          <div class="steps">
+            <div class="step">
+              <h4>Acesse o projeto no Linear</h4>
+              <p>Abra o board oficial: <a class="mono" href="https://linear.app/liiz/project/auniverse-mvp-9cc0da8e8083/issues" target="_blank" rel="noopener">linear.app/liiz/project/auniverse-mvp-9cc0da8e8083/issues</a></p>
+            </div>
+            <div class="step">
+              <h4>Filtre pelo seu cargo</h4>
+              <p>No board, filtre por área (Back-end, Banco de dados, Design, Front-end) para ver apenas as tasks relevantes ao seu papel.</p>
+            </div>
+            <div class="step">
+              <h4>Escolha a Sprint/Milestone e a task</h4>
+              <p>Clique no milestone desejado (M1 a M5) e depois na issue específica que você vai executar.</p>
+            </div>
+            <div class="step">
+              <h4>Documente enquanto trabalha</h4>
+              <p>No campo de comentários da issue: descreva passo a passo o que foi feito, use checklists sempre que possível, anexe prints/links relevantes. Quanto melhor a documentação, mais fácil será para o time entender o processo depois.</p>
+            </div>
+            <div class="step">
+              <h4>Finalize a task</h4>
+              <p>Revise o comentário, confirme que todos os critérios de aceite foram marcados e mova a issue para <strong>Done</strong>.</p>
+            </div>
+          </div>
+          <div class="card" style="margin-top:8px">
+            <h3>Guia completo de padrões</h3>
+            <p class="muted">Para convenções de nomenclatura, labels e boas práticas dentro do Linear, consulte o guia oficial do time:</p>
+            <p style="margin-top:8px"><a class="mono" href="https://linear.app/liiz/document/auniverse-guia-de-padroes-e-boas-praticas-no-linear-36d3bf1257df" target="_blank" rel="noopener">Guia de Padrões e Boas Práticas no Linear ↗</a></p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>O que é o método Kanban</h2></div>
+          <p class="muted" style="margin-bottom:16px">Gestão visual de trabalho: visualizar o fluxo, limitar trabalho em andamento, melhorar continuamente e entregar valor de forma contínua. Não exige prazos fixos, mas o time o adapta com Sprints.</p>
+          <div class="grid grid-4">
+            <div class="card"><h4 class="eyebrow">To do</h4><p class="muted" style="font-size:13.5px; margin-top:6px">Tasks planejadas que ninguém começou ainda.</p></div>
+            <div class="card"><h4 class="eyebrow">In progress</h4><p class="muted" style="font-size:13.5px; margin-top:6px">Alguém já assumiu essa atividade.</p></div>
+            <div class="card"><h4 class="eyebrow">Done</h4><p class="muted" style="font-size:13.5px; margin-top:6px">Task finalizada, documentada e pronta para ser considerada entregue.</p></div>
+            <div class="card"><h4 class="eyebrow">Won't do</h4><p class="muted" style="font-size:13.5px; margin-top:6px">Cancelada ou descartada — não será feita nesta sprint (ou nunca).</p></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Relatório semanal</h2></div>
+          <div class="callout callout-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z"/></svg>
+            <p>Envie pelo canal do Discord respectivo ao seu cargo (<code>#back-end</code>, <code>#front-end</code>, <code>#design</code>, <code>#banco-de-dados</code>, <code>#liderança</code>). Mesmo sem avanços, envie: <em>"Não houve avanços essa semana pois…"</em> — isso é tão importante quanto reportar progresso.</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA 3 — ROADMAP ======================= -->
+      <section class="page" id="page-roadmap">
+        <div class="page-head">
+          <div class="eyebrow">Aba 03 · onde estamos, onde vamos</div>
+          <h1>Roadmap &amp; Milestones</h1>
+          <p>Linha do tempo oficial de M1 a M5, com o status real levantado na última auditoria de código (30/08/2026), rumo à versão Beta.</p>
+        </div>
+
+        <section class="block">
+          <div class="card" style="text-align:center; padding:32px">
+            <span class="eyebrow">Lançamento da versão Beta</span>
+            <div style="font:700 46px var(--font-display); color:var(--mint); margin-top:10px" id="countdownBig">—</div>
+            <p class="muted" style="margin-top:8px">até <strong>20 de dezembro de 2026</strong></p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Resumo executivo do estado atual</h2></div>
+          <div class="card">
+            <p class="muted">O projeto já tem um <strong>protótipo navegável de front-end</strong> (feed, criação de obra, tela de escritor, blocos narrativos) e uma <strong>base inicial de persistência</strong> (SQLite + Drizzle, schemas Zod, seed, Server Actions de criação). Ainda não é um produto de ponta a ponta: leitura pública e página de detalhe da obra seguem placeholder, o editor do escritor trabalha majoritariamente em estado local, e faltam autenticação real, biblioteca, busca, comentários, notificações e métricas persistentes.</p>
+          </div>
+          <table class="status-table" style="margin-top:14px">
+            <thead><tr><th>Área</th><th>Situação atual</th></tr></thead>
+            <tbody>
+              <tr><td>Design system &amp; responsividade</td><td><span class="status-tag status-done">Protótipo avançado</span></td></tr>
+              <tr><td>Blocos narrativos</td><td><span class="status-tag status-progress">Demonstração/edição local</span></td></tr>
+              <tr><td>Fluxo de criação de obra</td><td><span class="status-tag status-progress">Parcial — persiste obra básica</span></td></tr>
+              <tr><td>Banco de dados</td><td><span class="status-tag status-progress">Fundação inicial, domínio incompleto</span></td></tr>
+              <tr><td>Leitura pública</td><td><span class="status-tag status-todo">Placeholder</span></td></tr>
+              <tr><td>Feed</td><td><span class="status-tag status-progress">Lista obras publicadas, interações locais</span></td></tr>
+              <tr><td>Conta e autenticação</td><td><span class="status-tag status-todo">Não implementada</span></td></tr>
+              <tr><td>Recursos sociais</td><td><span class="status-tag status-todo">Não persistentes</span></td></tr>
+              <tr><td>MVP completo</td><td><span class="status-tag status-progress">Em andamento</span></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Linha do tempo — Milestones</h2></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-date">M1</div>
+              <div class="tl-rail"><div class="tl-dot" style="background:var(--hiatus)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <h3>Foundation <span class="status-tag status-progress">Em andamento</span></h3>
+                <p>Autenticação de usuários, modelagem/migrações do banco e Server Actions CRUD do domínio.</p>
+                <ul>
+                  <li>Arquitetura definida: híbrido Supabase (Auth + RLS) + FastAPI (regras de negócio/RBAC, validado via JWT)</li>
+                  <li>Sandbox de <code>Social_Account</code> e função de snapshot já implementadas e testadas</li>
+                  <li>Pendente: cadastro/login real substituindo o usuário fixo (<code>limit(1)</code>) das Server Actions</li>
+                  <li>Pendente: schema completo (capa, fandom, classificação indicativa, progresso de leitura, curtidas)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date">M2</div>
+              <div class="tl-rail"><div class="tl-dot" style="background:var(--ink-dim)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <h3>Studio Writer <span class="status-tag status-todo">A iniciar</span></h3>
+                <p>Persistência de metadados, personagens, blocos narrativos e publicação real no Studio.</p>
+                <ul>
+                  <li>Conectar <code>SidebarMetadados</code> e <code>SidebarContas</code> à persistência real</li>
+                  <li>Botão "Salvar" hoje apenas simula salvamento — precisa gravar no banco</li>
+                  <li>Anexo de mídia no bloco Social ainda sem campo no editor</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date">M3</div>
+              <div class="tl-rail"><div class="tl-dot" style="background:var(--ink-dim)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <h3>Reader &amp; Discovery <span class="status-tag status-todo">A iniciar</span></h3>
+                <p>Leitor público de capítulos, página de detalhes da obra e busca/filtros no Espectro.</p>
+                <ul>
+                  <li><code>/capitulo/[id]</code> ainda exibe placeholder — precisa usar <code>getCapituloComBlocos</code> + <code>BlockRenderer</code></li>
+                  <li><code>/obra/[id]</code> possui TODO e não busca dados reais</li>
+                  <li>Busca e filtros do feed ainda não alteram os resultados exibidos</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date">M4</div>
+              <div class="tl-rail"><div class="tl-dot" style="background:var(--ink-dim)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <h3>Social &amp; Library <span class="status-tag status-todo">A iniciar</span></h3>
+                <p>Curtidas/Echos persistentes, tela da Estação (biblioteca) e Observatório (perfil).</p>
+                <ul>
+                  <li>Curtir obra hoje só persiste em <code>localStorage</code></li>
+                  <li>Estação (biblioteca pessoal) e Observatório (perfil público) ainda não têm rota funcional</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-date">M5</div>
+              <div class="tl-rail"><div class="tl-dot" style="background:var(--ink-dim)"></div></div>
+              <div class="tl-content">
+                <h3>Polish &amp; QA <span class="status-tag status-todo">A iniciar</span></h3>
+                <p>Correção dos testes Vitest, resolução de débitos de lint e padronização de proporção de capas.</p>
+                <ul>
+                  <li>65 testes passam / 7 falham (localStorage indisponível em teste + placeholders desatualizados)</li>
+                  <li>10 erros e 26 avisos de lint, principalmente tipagem <code>any</code></li>
+                  <li>Padronizar capa: 16:9 no Studio, 3:4 no card do feed, 2:3 no detalhe da obra</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Decisões que precisam ser fechadas antes do MVP</h2></div>
+          <table class="status-table">
+            <thead><tr><th>Prioridade</th><th>Decisão</th><th>Motivo</th></tr></thead>
+            <tbody>
+              <tr><td><span class="tag tag-urgente">Alta</span></td><td>Existe entidade Personagem ou apenas perfis/contas?</td><td>Muda Biblioteca, contas, grupos, chats e snapshots.</td></tr>
+              <tr><td><span class="tag tag-urgente">Alta</span></td><td>Cadastro de conta é opcional antes de escrever?</td><td>Modelagem suporta perfil temporário; design atual obriga cadastro prévio.</td></tr>
+              <tr><td><span class="tag tag-urgente">Alta</span></td><td>Como participantes de conversas são armazenados?</td><td><code>TEXT[]</code> não cobre identidade, apelidos e alterações.</td></tr>
+              <tr><td><span class="tag tag-urgente">Alta</span></td><td>Como uploads serão armazenados?</td><td>Capa e avatar já dependem disso no MVP (Supabase Storage vs CDN externa).</td></tr>
+              <tr><td><span class="tag tag-urgente">Alta</span></td><td>Formato da classificação indicativa</td><td>Obrigatória no MVP, ainda sem representação no banco.</td></tr>
+              <tr><td><span class="tag tag-alta">Média</span></td><td>Tags são só controladas pelo sistema?</td><td>Precisa ficar consistente entre front-end e banco.</td></tr>
+              <tr><td><span class="tag tag-alta">Média</span></td><td>Fandom é livre com autocomplete?</td><td>Define criação e normalização da tabela.</td></tr>
+              <tr><td><span class="tag tag-alta">Média</span></td><td>Direitos da história entram no MVP?</td><td>Aparece no design, mas não na lista final de prioridades.</td></tr>
+              <tr><td><span class="tag tag-alta">Média</span></td><td>Como funciona exclusão de conteúdo após publicação?</td><td>Define se será hard delete ou histórico/soft delete.</td></tr>
+              <tr><td><span class="tag tag-baixa">Baixa</span></td><td>Wallpaper, mídia e formatação avançada</td><td>Podem ser adiados sem travar o núcleo do MVP.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Fora de escopo do MVP</h2></div>
+          <div class="grid grid-2">
+            <div class="card">
+              <ul class="checklist">
+                <li><span class="box"></span>Chat fake / celular interativo em tempo real</li>
+                <li><span class="box"></span>Customização livre de HTML/CSS por obra</li>
+                <li><span class="box"></span>Painel de inspirações estilo Pinterest</li>
+                <li><span class="box"></span>Narrativas ramificadas / enquetes com decisão</li>
+              </ul>
+            </div>
+            <div class="card">
+              <ul class="checklist">
+                <li><span class="box"></span>Integração com streaming/áudio sincronizado (Spotify)</li>
+                <li><span class="box"></span>Tradução e correção gramatical automática via IA</li>
+                <li><span class="box"></span>Feed algorítmico complexo (MVP usa cronológico + filtros por tag)</li>
+                <li><span class="box"></span>Escrita colaborativa entre autores</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA 4 — LEGISLAÇÃO ======================= -->
+      <section class="page" id="page-legislacao">
+        <div class="page-head">
+          <div class="eyebrow">Aba 04 · conformidade</div>
+          <h1>Legislação que seguimos</h1>
+          <p>Marco legal brasileiro aplicável a uma plataforma social de leitura e escrita com conteúdo gerado por usuários, incluindo conteúdo adulto/sensível. Use esta aba como checklist de conformidade — vários pontos ainda dependem de decisão formal do time (ver marcações "em aberto").</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>Principais marcos legais</h2></div>
+          <div class="grid grid-2">
+            <div class="law-card">
+              <span class="eyebrow">LGPD · Lei 13.709/2018</span>
+              <h3 style="margin-top:6px">Lei Geral de Proteção de Dados</h3>
+              <p class="muted" style="margin-top:10px; font-size:14px">Regula a coleta, o armazenamento e o tratamento de dados pessoais de usuários (e-mail, senha, dados de perfil, histórico de leitura, IP). O AUniverse precisa de base legal para cada tratamento, política de privacidade clara, e mecanismos para o usuário acessar, corrigir ou excluir seus dados.</p>
+              <p class="dim" style="margin-top:10px; font-size:12.5px"><strong>Pendente:</strong> redigir Política de Privacidade e Termos de Uso; definir tempo de retenção de dados e fluxo de exclusão de conta.</p>
+            </div>
+            <div class="law-card">
+              <span class="eyebrow">ECA · Lei 8.069/1990</span>
+              <h3 style="margin-top:6px">Estatuto da Criança e do Adolescente</h3>
+              <p class="muted" style="margin-top:10px; font-size:14px">Fundamenta a exigência de classificação indicativa e proteção de menores contra conteúdo impróprio. Sustenta diretamente os requisitos de classificação etária (Livre a 18 anos), avisos de conteúdo sensível e bloqueio de conteúdo +18 para usuários não verificados.</p>
+              <p class="dim" style="margin-top:10px; font-size:12.5px"><strong>Pendente:</strong> definir estratégia de verificação de idade/consentimento (discussão registrada como aberta nas atas).</p>
+            </div>
+            <div class="law-card">
+              <span class="eyebrow">Marco Civil da Internet · Lei 12.965/2014</span>
+              <h3 style="margin-top:6px">Responsabilidade por conteúdo de terceiros</h3>
+              <p class="muted" style="margin-top:10px; font-size:14px">Define que a plataforma só responde civilmente por conteúdo de usuários se, após ordem judicial específica, não tomar providências para tornar indisponível o conteúdo infrator. Também exige guarda de registros de acesso (logs) por prazo determinado.</p>
+              <p class="dim" style="margin-top:10px; font-size:12.5px"><strong>Relacionado:</strong> fluxo de denúncia já em desenho — formulário validado, contato com o autor e prazo de resposta de uma semana.</p>
+            </div>
+            <div class="law-card">
+              <span class="eyebrow">Lei de Direitos Autorais · Lei 9.610/1998</span>
+              <h3 style="margin-top:6px">Direitos do autor sobre a obra</h3>
+              <p class="muted" style="margin-top:10px; font-size:14px">Fundamenta a seção "Direitos da história" prevista no design: cada Arquiteto deve poder declarar autoria, e definir se permite reprodução, tradução, adaptação ou uso de trechos por terceiros, sempre com crédito ao autor original.</p>
+              <p class="dim" style="margin-top:10px; font-size:12.5px"><strong>Em aberto:</strong> a funcionalidade existe na especificação de design, mas ainda não está confirmada na lista final de prioridades do MVP nem modelada no banco.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Moderação &amp; permissões</h2></div>
+          <div class="card">
+            <p class="muted">Decisão alinhada entre back-end e banco de dados: autenticação/login roda no <strong>Supabase Auth</strong>; autorização e papéis (usuário comum vs. moderador) são implementados como <strong>RBAC no FastAPI</strong>, validados via JWT. Regras simples de visibilidade de dados usam <strong>RLS do Supabase</strong>; ações de negócio (aprovar ou remover conteúdo) passam pelo FastAPI.</p>
+            <table class="simple" style="margin-top:14px">
+              <thead><tr><th>Ação</th><th>Camada responsável</th></tr></thead>
+              <tbody>
+                <tr><td>Login / sessão</td><td>Supabase Auth</td></tr>
+                <tr><td>Visibilidade de obra pública/privada</td><td>RLS (Supabase)</td></tr>
+                <tr><td>Aprovar ou remover conteúdo denunciado</td><td>FastAPI (RBAC + JWT)</td></tr>
+                <tr><td>Permissões de moderador</td><td>FastAPI (RBAC + JWT)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Checklist de conformidade para o MVP</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Política de Privacidade publicada e acessível no cadastro</li>
+              <li><span class="box"></span>Termos de Uso com regras de conteúdo, direitos autorais e conduta</li>
+              <li><span class="box"></span>Classificação indicativa obrigatória por obra (Livre a 18 anos)</li>
+              <li><span class="box"></span>Aviso explícito antes de exibir conteúdo +18 ou sensível (tags de gatilho/TW)</li>
+              <li><span class="box"></span>Fluxo de denúncia com prazo de resposta definido (1 semana, conforme ata)</li>
+              <li><span class="box"></span>Mecanismo de exclusão de conta e dados pessoais (direito ao esquecimento — LGPD)</li>
+              <li><span class="box"></span>Definição formal de verificação de idade/consentimento</li>
+              <li><span class="box"></span>Estrutura de créditos obrigatórios quando reprodução/adaptação for permitida</li>
+            </ul>
+          </div>
+          <div class="callout callout-open" style="margin-top:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>
+            <p>Este é um resumo orientativo, não um parecer jurídico. Antes do lançamento Beta, valide os termos finais com apoio jurídico formal.</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA — BACK-END ======================= -->
+      <section class="page" id="page-backend">
+        <div class="page-head">
+          <div class="eyebrow badge badge-be" style="display:inline-block">Back-end</div>
+          <h1>Backlog — Back-end</h1>
+          <p>Time: Marcos e Stephany. Arquitetura confirmada: <strong>Supabase</strong> (autenticação + Postgres + RLS) combinado com <strong>FastAPI</strong> (Python) para regras de negócio, validação e permissões via JWT.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>MVP atual — o que já existe</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Sandbox <code>auniverse-api</code> com <code>database.py</code>, <code>models.py</code> e CRUDs separados por entidade</li>
+              <li><span class="box"></span>Tabela <code>Social_Account</code> criada com CRUD completo (criar, buscar, atualizar parcial, soft delete)</li>
+              <li><span class="box"></span>Função <code>criar_snapshot()</code> implementada e validada — snapshot congelado não é afetado por edições posteriores da conta</li>
+              <li><span class="box"></span>Framework definido em conjunto com o time: <strong>Python + FastAPI</strong> cobrindo toda a aplicação</li>
+              <li><span class="box"></span>Modelo híbrido Supabase + FastAPI documentado e validado com o time de banco de dados</li>
+            </ul>
+          </div>
+          <div class="callout callout-warn" style="margin-top:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.5a1.5 1.5 0 0 0 1.3 2.2h16.4a1.5 1.5 0 0 0 1.3-2.2L13.7 3.9a1.5 1.5 0 0 0-2.6 0Z"/></svg>
+            <p>Pontos a confirmar com o time de BD: grafia de <code>profile_iid</code>/<code>profile_id</code>, nome exato da tabela (<code>Social_Account</code> vs. <code>social_accounts</code>), destino do campo <code>cover_url</code>, e se a validação de tamanho fica em <code>varchar(100)</code> no banco ou em Pydantic no backend.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Próximo passo imediato</h2></div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">PRÓXIMO</span><div class="issue-tags"><span class="tag tag-urgente">Urgente</span></div></div>
+            <div class="issue-title">Modelar e implementar Block</div>
+            <p class="issue-desc">Campos: <code>chapter_id</code>, <code>type</code>, <code>order_index</code>, <code>content</code> (JSONB). Em seguida, integrar o snapshot dentro do <code>content</code> de um bloco tipo <code>social</code>. Depois: <code>Conversation_Template</code>, e mais à frente <code>story</code>/<code>chapter</code>.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Backlog completo — Milestones</h2></div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M1-01</span><div class="issue-tags"><span class="tag tag-urgente">Urgente</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Implementar autenticação de usuários e sessão segura</div>
+            <p class="issue-desc">Substituir o usuário fixo atual (<code>limit(1)</code>) por autenticação real: cadastro, login, logout, hash seguro de senha e extração do usuário logado em Server Actions/rotas protegidas.</p>
+            <ul>
+              <li>Cadastro com validação Zod (e-mail único, senha mínima 8 caracteres, handle único)</li>
+              <li>Login e logout de sessão</li>
+              <li>Hash de senha com algoritmo seguro (argon2 ou bcrypt)</li>
+              <li>Helper <code>getCurrentUser()</code> acessível nas Server Actions</li>
+              <li>Redirecionamento automático ao acessar <code>/escritor</code> sem autenticação</li>
+            </ul>
+            <p class="issue-note">Nota técnica: considerar Better-Auth ou NextAuth/Auth.js com Drizzle Adapter e tabelas <code>sessions</code>/<code>accounts</code> — ou a decisão já validada de Supabase Auth.</p>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M1-03</span><div class="issue-tags"><span class="tag tag-alta">Alta</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Implementar Server Actions completas para Obras e Capítulos</div>
+            <p class="issue-desc">CRUD completo com autorização e validação para obras, capítulos e personagens pelos respectivos autores.</p>
+            <ul>
+              <li><code>atualizarObra(id, dados)</code> valida se o usuário é o dono da obra</li>
+              <li><code>deletarObra(id)</code> — exclusão segura e em cascata</li>
+              <li><code>atualizarCapitulo(id, dados)</code> e <code>reordenarCapitulos(obraId, ordemIds[])</code></li>
+              <li><code>salvarPersonagens(obraId, personagens[])</code> — cria/atualiza/deleta personagens vinculados</li>
+              <li>Retorno padronizado: <code>{'{'} success: true, data {'}'}</code> ou <code>{'{'} success: false, error {'}'}</code></li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M2-02</span><div class="issue-tags"><span class="tag tag-urgente">Urgente</span><span class="tag">Fullstack</span></div></div>
+            <div class="issue-title">Conectar persistência de blocos e publicação do capítulo</div>
+            <p class="issue-desc">Permitir que o autor salve rascunhos e publique capítulos completos com a lista ordenada de blocos.</p>
+            <ul>
+              <li><code>salvarCapituloCompleto(capituloId, {'{'} titulo, status, blocos {'}'})</code> em transação atômica</li>
+              <li>Botão "Salvar" com indicador de estado (Salvo / Salvando... / Erro)</li>
+              <li>Botão "Publicar" valida ao menos 1 bloco com conteúdo antes de mudar status</li>
+              <li>Carregamento inicial de <code>/escritor?capituloId=UUID</code> buscando dados persistidos</li>
+            </ul>
+            <p class="issue-note">Nota técnica: usar <code>db.transaction()</code> para evitar capítulos salvos parcialmente corrompidos.</p>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M4-01</span><div class="issue-tags"><span class="tag tag-media">Média</span><span class="tag">Fullstack</span></div></div>
+            <div class="issue-title">Persistência de Curtidas/Echos e contadores</div>
+            <p class="issue-desc">Migrar o botão de curtir de <code>localStorage</code> para persistência real vinculada ao usuário autenticado.</p>
+            <ul>
+              <li><code>toggleCurtidaObra(obraId)</code> como Server Action</li>
+              <li>Atualização otimista no front-end com rollback em erro</li>
+              <li>Índice único <code>(usuarioId, obraId)</code> para evitar duplicação</li>
+              <li>Exigir login para curtir (modal/toast se deslogado)</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">RECOMENDAÇÃO</span><div class="issue-tags"><span class="tag tag-media">Média</span></div></div>
+            <div class="issue-title">Feed personalizado — Content-Based Filtering (MVP)</div>
+            <p class="issue-desc">Recomendação simples usando apenas dados já existentes: tags das obras curtidas/salvas geram pontuação de interesse (curtida +1, salva na biblioteca +3). Sem novas tabelas — usa <code>STORY</code>, <code>STORY_LIKE</code> e <code>USER_LIBRARY</code>.</p>
+            <ul>
+              <li>Baixo custo computacional, fácil manutenção, evolutivo</li>
+              <li>Complemento futuro: tags de interesse no cadastro para reduzir cold start</li>
+            </ul>
+            <p class="issue-note">Em aberto: tags livres ou pré-definidas, quantidade máxima de tags, peso das interações — precisa de decisão conjunta do time.</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA — FRONT-END ======================= -->
+      <section class="page" id="page-frontend">
+        <div class="page-head">
+          <div class="eyebrow badge badge-fe" style="display:inline-block">Front-end</div>
+          <h1>Backlog — Front-end</h1>
+          <p>Time: Barbi, Lucy e Dani. Stack: Next.js 15+ (App Router, Server Actions, RSC), Tailwind com tokens do Design System, TipTap para o editor de texto rico.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>MVP atual — o que já existe</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Layout Next.js em pt-BR com tema escuro e fontes Sora/Inter/JetBrains Mono</li>
+              <li><span class="box"></span>Identidade visual cósmica aplicada via tokens em <code>globals.css</code></li>
+              <li><span class="box"></span>Navegação Espectro, Escritor, Estação, Scanner, Observatório e Demo</li>
+              <li><span class="box"></span>Feed Espectro consultando obras publicadas no banco, com <code>ObraCard</code></li>
+              <li><span class="box"></span>Tela de escritor completa: metadados, personagens, 5 tipos de bloco, ordenação, modo foco, preview</li>
+              <li><span class="box"></span><code>BlockRenderer</code> para os 5 tipos de bloco (Narração, Chat, Social, Imagem, Divisor)</li>
+              <li><span class="box"></span>Responsivo desktop/mobile, incluindo sidebar em drawer no Escritor</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Backlog completo — Milestones</h2></div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M2-01</span><div class="issue-tags"><span class="tag tag-alta">Alta</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Integrar formulário de metadados e personagens à persistência</div>
+            <p class="issue-desc">Conectar <code>SidebarMetadados</code> e <code>SidebarContas</code> na página <code>/escritor</code> para carregar dados existentes e persistir alterações via Server Actions.</p>
+            <ul>
+              <li>Adicionar campo <strong>Bio</strong> no formulário de edição de personagem</li>
+              <li>Suportar seleção/edição de classificação etária (+18) em <code>SidebarMetadados</code></li>
+              <li>Persistir alterações ao clicar em "Salvar"</li>
+              <li>Feedback visual de loading, sucesso (toast) e erro</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M2-03</span><div class="issue-tags"><span class="tag tag-media">Média</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Anexo de mídia no editor de bloco Social</div>
+            <p class="issue-desc"><code>SocialMediaBlock</code> já renderiza imagens anexadas, mas o editor no Studio não tem campo para informar a URL da mídia.</p>
+            <ul>
+              <li>Input de URL de mídia no card de edição do bloco social</li>
+              <li>Preview da imagem antes de fechar a edição</li>
+              <li>Botão para remover anexo de mídia</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M3-01</span><div class="issue-tags"><span class="tag tag-urgente">Urgente</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Página pública do leitor de capítulos</div>
+            <p class="issue-desc">Substituir o placeholder em <code>/capitulo/[id]/page.tsx</code> pela experiência completa usando <code>getCapituloComBlocos</code> e <code>BlockRenderer</code>.</p>
+            <ul>
+              <li>Carregar capítulo e blocos via Server Component pelo ID na URL</li>
+              <li>Header discreto: título da obra, número do capítulo, voltar, barra de progresso</li>
+              <li>Navegação para capítulo anterior/próximo</li>
+              <li>Tratamento de capítulo não encontrado (404 cósmico)</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M3-02</span><div class="issue-tags"><span class="tag tag-alta">Alta</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Página de detalhes da obra</div>
+            <p class="issue-desc">Implementar <code>/obra/[id]/page.tsx</code> com informações completas: autor, sinopse, classificação, tags e lista de capítulos.</p>
+            <ul>
+              <li>Capa, título, sinopse, autor (avatar + link de perfil), status, última atualização</li>
+              <li>Badge explícito de classificação indicativa (+18 se aplicável)</li>
+              <li>Lista de capítulos com status de leitura (se logado) e link direto</li>
+              <li>Botões "Começar a Ler" e "Salvar na Estação"</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M3-03</span><div class="issue-tags"><span class="tag tag-media">Média</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Filtros e busca no feed Espectro</div>
+            <p class="issue-desc">Tornar funcionais a busca e os seletores de categoria/tag na página inicial do feed.</p>
+            <ul>
+              <li>Busca textual por título/sinopse/autor via URL SearchParams</li>
+              <li>Clique em tags populares filtra os cards</li>
+              <li>Estado vazio amigável quando nada for encontrado</li>
+              <li>Skeleton loading durante transições de filtro</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M4-02</span><div class="issue-tags"><span class="tag tag-media">Média</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Tela da Estação (Biblioteca Pessoal)</div>
+            <p class="issue-desc">Criar <code>/estacao</code> permitindo ao leitor visualizar/gerenciar obras salvas e histórico de leitura.</p>
+            <ul>
+              <li>Abas: "Lendo Agora", "Salvas para Depois", "Lidas"</li>
+              <li>Card com barra de progresso do último capítulo lido</li>
+              <li>Remover obra da biblioteca</li>
+              <li>Estado vazio com CTA para explorar o Espectro</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M4-03</span><div class="issue-tags"><span class="tag tag-baixa">Baixa</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Tela do Observatório (Perfil do Usuário)</div>
+            <p class="issue-desc">Criar <code>/observatorio/[handle]</code> exibindo perfil público com obras publicadas e informações de autor.</p>
+            <ul>
+              <li>Foto, handle, nome, bio, estatísticas públicas (obras, echos)</li>
+              <li>Grid/lista das obras publicadas</li>
+              <li>Se for o próprio usuário: botão "Editar Perfil" e atalho para o Studio</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M5-02</span><div class="issue-tags"><span class="tag tag-media">Média</span><span class="tag">Design</span></div></div>
+            <div class="issue-title">Padronizar proporção das capas</div>
+            <p class="issue-desc">Unificar a exibição: 3:4 no card do feed, 2:3 no detalhe da obra e 16:9 no banner do Studio.</p>
+            <ul>
+              <li><code>ObraCard</code> mantém proporção retrato consistente, sem distorção</li>
+              <li><code>object-fit: cover</code> com container de tamanho reservado (evitar CLS)</li>
+              <li>Fallback cósmico (gradiente + ícone orbital) quando não houver capa</li>
+            </ul>
+          </div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M5-01</span><div class="issue-tags"><span class="tag tag-alta">Alta</span><span class="tag">Tech Debt</span></div></div>
+            <div class="issue-title">Corrigir testes Vitest e erros de ESLint</div>
+            <p class="issue-desc">Resolver 7 falhas de teste (<code>curtir-button.test.tsx</code>, <code>chat-editor.test.tsx</code>) e 10 erros de lint.</p>
+            <ul>
+              <li>Mock adequado de <code>localStorage</code> ou migração para testes com store/action</li>
+              <li>Atualizar placeholders esperados em <code>chat-editor.test.tsx</code></li>
+              <li>Eliminar tipagens <code>any</code> explícitas</li>
+              <li><code>bunx vitest run</code> 100% e <code>bun run lint</code> sem erros bloqueantes</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA — BANCO DE DADOS ======================= -->
+      <section class="page" id="page-bancodados">
+        <div class="page-head">
+          <div class="eyebrow badge badge-bd" style="display:inline-block">Banco de Dados</div>
+          <h1>Backlog — Banco de Dados</h1>
+          <p>Time: Igor e Fernanda. Base atual: SQLite local + Drizzle ORM, migrando para modelo híbrido Supabase (Postgres + RLS) com FastAPI para regras de negócio.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>MVP atual — tabelas existentes</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span><code>users</code>, <code>obras</code>, <code>tags</code>, <code>obras_tags</code>, <code>capitulos</code>, <code>blocos</code>, <code>personagens</code>, <code>chats_reutilizaveis</code></li>
+              <li><span class="box"></span>Seed reproduzível com usuário, obra, personagens, capítulo e exemplo dos 5 tipos de bloco</li>
+              <li><span class="box"></span>Queries para listar obras públicas e carregar capítulo com blocos</li>
+              <li><span class="box"></span><code>Social_Account</code> criada no Supabase com CRUD completo e soft delete (<code>is_active=false</code>)</li>
+              <li><span class="box"></span>Função <code>criar_snapshot()</code> validada — alterar a conta depois não afeta snapshot já gerado</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Decisões estruturais críticas</h2></div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">BD-01</span><div class="issue-tags"><span class="tag tag-urgente">Muito alto impacto</span></div></div>
+            <div class="issue-title">Dependência entre contas e escrita</div>
+            <p class="issue-desc">O design atual obriga cadastrar contas/personagens antes de escrever. A modelagem já suporta <strong>perfil temporário</strong> (<code>account_id = null</code> + snapshot direto no bloco), então essa dependência não é técnica — é de fluxo de produto.</p>
+            <ul>
+              <li>Regra recomendada: ao criar cena social, permitir "perfil salvo" (<code>account_id</code> + snapshot) OU "perfil temporário" (snapshot sem <code>account_id</code>)</li>
+              <li>Telas de seleção de conta devem oferecer opção "+ Usar perfil temporário"</li>
+            </ul>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">BD-02</span><div class="issue-tags"><span class="tag tag-urgente">Alto impacto</span></div></div>
+            <div class="issue-title">Participantes de grupos/conversas</div>
+            <p class="issue-desc"><code>Conversation_Template.participants</code> hoje é <code>TEXT[]</code>, o que não cobre identidade estruturada, apelidos de contexto e alterações posteriores.</p>
+            <ul>
+              <li>Substituir por relação estruturada <code>conversation_participant</code> (<code>conversation_id</code>, <code>account_id</code>, <code>nickname</code>, <code>order_index</code>)</li>
+              <li>Preserva separação entre identidade reutilizável (Biblioteca) e conteúdo específico da simulação</li>
+            </ul>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">BD-03</span><div class="issue-tags"><span class="tag tag-alta">Alto impacto</span></div></div>
+            <div class="issue-title">Personagem × Conta</div>
+            <p class="issue-desc">Não é necessário criar uma entidade <code>Character</code> separada agora. Cada <code>Social_Account</code> pode representar diretamente um personagem; um mesmo personagem pode ter várias contas (ex.: "Sofia" e "Sofia privado") cadastradas como templates independentes.</p>
+            <ul>
+              <li>Adicionar <code>is_private BOOLEAN</code> em <code>Social_Account</code> para diferenciar contas públicas/privadas visualmente</li>
+              <li>Permitir nome identificador do template na Biblioteca, distinto do <code>name</code> exibido</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Backlog completo — ajustes de schema</h2></div>
+
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">M1-02</span><div class="issue-tags"><span class="tag tag-alta">Alta</span><span class="tag">Feature</span></div></div>
+            <div class="issue-title">Complementar schema e criar migrações do domínio</div>
+            <ul>
+              <li>Adicionar em <code>obras</code>: <code>classificacaoEtaria</code>, <code>statusPublicacao</code>, <code>fandom</code>, <code>generoPrincipal</code></li>
+              <li>Adicionar <code>bio</code> e <code>avatarUrl</code> em <code>personagens</code></li>
+              <li>Criar <code>leituras_progresso</code>, <code>curtidas_obras</code>, <code>biblioteca_itens</code></li>
+              <li>Gerar migração Drizzle e atualizar <code>seed.ts</code></li>
+            </ul>
+          </div>
+
+          <table class="status-table" style="margin-top:8px">
+            <thead><tr><th>Item</th><th>Situação</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td>Capa da obra</td><td><span class="status-tag status-todo">Não modelada</span></td><td>Adicionar <code>cover_image_url</code> + decidir storage (Supabase Storage vs CDN)</td></tr>
+              <tr><td>Fandom</td><td><span class="status-tag status-todo">Não modelado</span></td><td>Criar <code>fandom</code> + <code>story_fandom</code> (N:N)</td></tr>
+              <tr><td>Classificação indicativa</td><td><span class="status-tag status-todo">Não modelada</span></td><td>Enum direto em <code>story</code>: livre · 10 · 12 · 14 · 16 · 18</td></tr>
+              <tr><td>Identidade básica da conta</td><td><span class="status-tag status-done">Compatível</span></td><td>Manter nome + username + avatar; não expandir para bio/seguidores agora</td></tr>
+              <tr><td>Métricas de posts sociais</td><td><span class="status-tag status-todo">Ausente do JSON</span></td><td>Estruturar <code>metrics: {'{'} views, likes, comments, shares {'}'}</code> extensível</td></tr>
+              <tr><td>Comentários simulados</td><td><span class="status-tag status-progress">Parcial</span></td><td>Adicionar <code>comment_id</code> único por comentário no JSON</td></tr>
+              <tr><td>Exclusão de bloco</td><td><span class="status-tag status-todo">Regra ausente</span></td><td>Definir hard delete simples para o MVP (soft delete fica para versionamento futuro)</td></tr>
+              <tr><td>Narração formatada</td><td><span class="status-tag status-progress">Incompleta</span></td><td>Decidir formato: Markdown, HTML sanitizado ou JSON do rich text</td></tr>
+              <tr><td>Autosave × Snapshot</td><td><span class="status-tag status-progress">Definir regra</span></td><td>Autosave só atualiza estado atual; NÃO gera novo snapshot a cada salvamento</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+
+      <!-- ======================= ABA — DESIGN ======================= -->
+      <section class="page" id="page-design">
+        <div class="page-head">
+          <div class="eyebrow badge badge-design" style="display:inline-block">Design</div>
+          <h1>Backlog — Design</h1>
+          <p>Time: Renata e Bianca. Fonte de verdade: <code>docs/DESIGN_FIGMA.md</code>. Conclusão da última validação: <strong>graficamente consistente e bem encaminhado</strong> — as pendências abaixo são ajustes de acabamento, não bloqueadores.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>Referências oficiais</h2></div>
+          <div class="grid grid-2">
+            <div class="card"><h3>Figma — Telas</h3><p class="muted" style="margin-top:6px">FileKey <code>D73KbVY94eWKoKRBEM8zx6</code> · Node <code>3:2</code></p><a class="mono" style="display:inline-block; margin-top:8px" href="https://www.figma.com/proto/D73KbVY94eWKoKRBEM8zx6?node-id=3-2" target="_blank" rel="noopener">Abrir protótipo ↗</a></div>
+            <div class="card"><h3>Figma — Brainstorm</h3><p class="muted" style="margin-top:6px">FileKey <code>oT3Jx1y0AsrhC3gij0X2zU</code></p><a class="mono" style="display:inline-block; margin-top:8px" href="https://www.figma.com/design/oT3Jx1y0AsrhC3gij0X2zU/BRAINSTORM" target="_blank" rel="noopener">Abrir brainstorm ↗</a></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>MVP atual — validado</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Tema cósmico/dark refletido em <code>globals.css</code></li>
+              <li><span class="box"></span>Tela de Escritor com composição prevista: header, canvas, sidebar de 3 abas, dock, preview</li>
+              <li><span class="box"></span>5 blocos com linguagem própria sem perder unidade: Narração, Chat, Social, Imagem, Divisor</li>
+              <li><span class="box"></span>Comportamento mobile: sidebar/drawer, header compacto, dock com rolagem horizontal</li>
+              <li><span class="box"></span>Feed com 3 colunas em desktop: navegação, conteúdo central, descoberta</li>
+              <li><span class="box"></span>Chat fake/celular interativo confirmado como fora do MVP</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Ajustes gráficos recomendados</h2></div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-01</span><div class="issue-tags"><span class="tag tag-alta">Alta</span></div></div>
+            <div class="issue-title">Padronizar proporção de capa por contexto</div>
+            <p class="issue-desc">Figma define 16:9, a página da obra usa 2:3 e o <code>ObraCard</code> usa vertical adaptada à altura do card. Confirmar oficialmente as três regras (Studio 16:9 · Feed 3:4 · Detalhe 2:3) ou unificar.</p>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-02</span><div class="issue-tags"><span class="tag tag-alta">Alta</span></div></div>
+            <div class="issue-title">Revisar contraste do Plasma Blue</div>
+            <p class="issue-desc"><code>#074969</code> pode ficar escuro demais para texto pequeno sobre fundos escuros. Usar preferencialmente como fundo/borda; reservar Starlight Mint para texto.</p>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-03</span><div class="issue-tags"><span class="tag tag-media">Média</span></div></div>
+            <div class="issue-title">Completar estados visuais em todas as telas</div>
+            <p class="issue-desc">Padronizar hover, focus, disabled, loading, erro, sucesso, +18 e autosave com o mesmo tratamento visual entre telas.</p>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-04</span><div class="issue-tags"><span class="tag tag-media">Média</span></div></div>
+            <div class="issue-title">Padronizar ícones e vocabulário visual</div>
+            <p class="issue-desc">O design usa "Echo/Reespectar"; alguns componentes ainda mostram termos genéricos como curtidas/comentários. Definir vocabulário visual final e aplicar em todo lugar.</p>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-05</span><div class="issue-tags"><span class="tag tag-media">Média</span></div></div>
+            <div class="issue-title">Validar telas vazias</div>
+            <p class="issue-desc">Criar estados visuais consistentes para: nenhuma obra, nenhum capítulo, biblioteca vazia, busca sem resultado, conteúdo bloqueado.</p>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-06</span><div class="issue-tags"><span class="tag tag-media">Média</span></div></div>
+            <div class="issue-title">Testar em larguras reais</div>
+            <p class="issue-desc">Revisar 320, 375, 768, 1024 e telas ultrawide para evitar quebra no header, cards e sidebar.</p>
+          </div>
+          <div class="issue">
+            <div class="issue-top"><span class="issue-id">DES-07</span><div class="issue-tags"><span class="tag tag-media">Média</span></div></div>
+            <div class="issue-title">Acessibilidade visual</div>
+            <p class="issue-desc">Conferir foco de teclado, tamanho mínimo de toque, leitura dos badges +18 e contraste dos textos secundários.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Checklist de revisão visual</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Paleta usa tokens, sem cores ad hoc por tela</li>
+              <li><span class="box"></span>Contraste conferido em textos, bordas e estados</li>
+              <li><span class="box"></span>Ação primária clara em cada contexto</li>
+              <li><span class="box"></span>Ícones vetoriais, consistentes e acessíveis (sem emoji estrutural)</li>
+              <li><span class="box"></span>Cards do feed seguem lista vertical e proporção de capa definida</li>
+              <li><span class="box"></span>Studio mantém canvas, sidebar e dock em desktop/mobile</li>
+              <li><span class="box"></span>Leitor prioriza imersão e medida de texto confortável</li>
+              <li><span class="box"></span>Estados vazio, loading, erro, foco e +18 têm tratamento visual</li>
+              <li><span class="box"></span>Layout revisado em 320, 375, 768, 1024 e 1440px</li>
+              <li><span class="box"></span>Manual HTML (<code>docs/index.html</code>) atualizado junto com o Design System</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================= ABA — ESCRITORES / QA ======================= -->
+      <section class="page" id="page-qa">
+        <div class="page-head">
+          <div class="eyebrow badge badge-qa" style="display:inline-block">Escritores / QA</div>
+          <h1>Backlog &amp; Guia de Testes</h1>
+          <p>Escritores testers: Tainá (Jay), Luiza, Thais, Leticia, Larissa, Angelyna, Lena e Ellie. QA: Bianca. Vocês validam a plataforma pela experiência real de quem escreve e lê — a etapa mais próxima do usuário final.</p>
+        </div>
+
+        <section class="block">
+          <div class="block-head"><h2>Tutorial — como testar de forma intuitiva</h2></div>
+          <div class="steps">
+            <div class="step">
+              <h4>Escolha uma área do MVP para testar</h4>
+              <p>Use a lista de "MVP atual" logo abaixo para escolher: Tela de Escritor, Feed, ou um fluxo específico (ex.: criar obra → escrever capítulo → publicar).</p>
+            </div>
+            <div class="step">
+              <h4>Teste como uma pessoa real testaria</h4>
+              <p>Não pense em código — pense em história. Tente criar uma AU de verdade: cadastre personagens, escreva uma cena de chat, adicione um post social, publique um capítulo. Anote tudo que te confundiu, travou ou pareceu estranho.</p>
+            </div>
+            <div class="step">
+              <h4>Preencha o documento de teste</h4>
+              <p>Use o modelo abaixo para cada rodada de teste. Preencha um documento novo a cada vez que for testar algo diferente (não acumule várias funcionalidades no mesmo relatório).</p>
+            </div>
+            <div class="step">
+              <h4>Envie por e-mail</h4>
+              <p>Envie o documento preenchido para <strong>auniverse2026@gmail.com</strong> com o assunto no formato: <code>[TESTE] Nome da funcionalidade — seu nome</code>.</p>
+              <a class="email-cta" href="mailto:auniverse2026@gmail.com?subject=%5BTESTE%5D%20Nome%20da%20funcionalidade%20—%20seu%20nome">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18v12H3V6Zm0 0 9 7 9-7"/></svg>
+                Enviar teste para auniverse2026@gmail.com
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Modelo de documento de teste</h2></div>
+          <p class="muted" style="margin-bottom:14px">Copie esta estrutura para cada nova rodada de teste (Google Docs, Word ou até um e-mail direto):</p>
+          <div class="template-box">
+            <div class="field-row"><span class="label">Testado por</span><span>Seu nome</span></div>
+            <div class="field-row"><span class="label">Data</span><span>DD/MM/AAAA</span></div>
+            <div class="field-row"><span class="label">Funcionalidade testada</span><span>Ex.: "Tela de Escritor — bloco de Chat"</span></div>
+            <div class="field-row"><span class="label">Dispositivo/navegador</span><span>Ex.: "Chrome desktop", "Safari iPhone 13"</span></div>
+            <div class="field-row"><span class="label">O que eu tentei fazer</span><span>Descreva passo a passo o que você tentou fazer, como se estivesse contando pra alguém que não viu a tela</span></div>
+            <div class="field-row"><span class="label">O que aconteceu</span><span>O resultado real — funcionou, travou, deu erro, ficou estranho visualmente?</span></div>
+            <div class="field-row"><span class="label">O que eu esperava</span><span>O que você imaginava que ia acontecer</span></div>
+            <div class="field-row"><span class="label">Gravidade</span><span>🔴 Travou tudo · 🟡 Funciona mas incomoda · 🟢 Sugestão/ideia</span></div>
+            <div class="field-row"><span class="label">Prints/vídeo</span><span>Anexe capturas de tela sempre que possível — ajuda demais</span></div>
+            <div class="field-row"><span class="label">Consigo reproduzir de novo?</span><span>Sim / Não / Às vezes — e como reproduzir</span></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>MVP atual disponível para teste</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Tela de Escritor: metadados, personagens, 5 tipos de bloco, modo foco, preview</li>
+              <li><span class="box"></span>Feed Espectro: listagem de obras publicadas</li>
+              <li><span class="box"></span>Blocos narrativos: Narração, Chat, Social Media, Imagem, Divisor</li>
+              <li><span class="box"></span>Responsividade em mobile e desktop</li>
+            </ul>
+            <p class="dim" style="margin-top:12px; font-size:12.5px">Ainda não testável (placeholder/local): leitura pública de capítulo, página de detalhe da obra, curtidas persistentes, login/cadastro real, busca e biblioteca.</p>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Backlog completo do MVP (referência)</h2></div>
+          <p class="muted" style="margin-bottom:14px">Itens que, quando implementados, precisarão de uma nova rodada de teste dedicada.</p>
+          <div class="grid grid-2">
+            <div class="card">
+              <h3>Núcleo do MVP</h3>
+              <ul class="checklist">
+                <li><span class="box"></span>Feed principal (universo) e Feed Seguindo</li>
+                <li><span class="box"></span>Leitura contínua por rolagem e de onde parou</li>
+                <li><span class="box"></span>Sistema de tags (MVP fechado)</li>
+                <li><span class="box"></span>Curtir obra (MVP)</li>
+                <li><span class="box"></span>Comentários gerais</li>
+                <li><span class="box"></span>Biblioteca pessoal e registro de obras lidas</li>
+                <li><span class="box"></span>Opção de AU pública/privada</li>
+                <li><span class="box"></span>Criação e edição de obras/capítulos</li>
+                <li><span class="box"></span>Perfis de personagens com bio</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Avisos &amp; conteúdo sensível</h3>
+              <ul class="checklist">
+                <li><span class="box"></span>Avisos de TW (trigger warning)</li>
+                <li><span class="box"></span>Tags de aviso automáticas em conteúdo maduro</li>
+                <li><span class="box"></span>Avisos exibidos antes da leitura</li>
+                <li><span class="box"></span>Avisos vinculados à obra e ao capítulo</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2>Escopo experimental / futuro (ainda não testar)</h2></div>
+          <div class="card">
+            <ul class="checklist">
+              <li><span class="box"></span>Chat fake / celular interativo — marcado como NÃO no escopo atual</li>
+              <li><span class="box"></span>HTML/CSS customizável por obra</li>
+              <li><span class="box"></span>Painel de inspirações estilo Pinterest</li>
+              <li><span class="box"></span>Decisões narrativas / branching</li>
+              <li><span class="box"></span>Integração com Spotify e tradução automática</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      <div class="footer-note">AUniverse · documentação viva — atualize esta página junto com o código, o Figma e o Linear sempre que algo mudar. Baseado em <code>DESIGN_FIGMA.md</code>, <code>VALIDACAO_DESIGN.md</code>, <code>LINEAR_BACKLOG_SPEC.md</code>, <code>STATUS_CONSOLIDADO.md</code>, cruzamento BD×Design e Documentação Original 0.1.</div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  // ---- navigation ----
+  const links = document.querySelectorAll('.navlink');
+  const pages = document.querySelectorAll('.page');
+  function go(target){
+    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + target));
+    links.forEach(l => {
+      const active = l.dataset.target === target;
+      l.toggleAttribute('aria-current', active);
+      if(active) l.setAttribute('aria-current','page'); else l.removeAttribute('aria-current');
+    });
+    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    closeSidebar();
+  }
+  links.forEach(l => l.addEventListener('click', () => go(l.dataset.target)));
+
+  // ---- mobile sidebar ----
+  const sidebar = document.getElementById('sidebar');
+  const menuBtn = document.getElementById('menuBtn');
+  const scrim = document.getElementById('scrim');
+  function openSidebar(){ sidebar.classList.add('open'); scrim.classList.add('show'); menuBtn.setAttribute('aria-expanded','true'); }
+  function closeSidebar(){ sidebar.classList.remove('open'); scrim.classList.remove('show'); menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+  scrim.addEventListener('click', closeSidebar);
+
+  // ---- countdown to Dec 20 2026 ----
+  const target = new Date('2026-12-20T00:00:00-03:00').getTime();
+  function updateCountdown(){
+    const now = Date.now();
+    const diff = target - now;
+    const dayEl = document.getElementById('countdownNum');
+    const bigEl = document.getElementById('countdownBig');
+    if(diff <= 0){
+      dayEl.textContent = 'Lançado!';
+      bigEl.textContent = 'Lançado!';
+      return;
+    }
+    const days = Math.floor(diff / (1000*60*60*24));
+    dayEl.textContent = days + ' dias';
+    bigEl.textContent = days + ' dias';
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000*60*30);
+}());
+</script>
+</body>
+</html>
